@@ -14,12 +14,13 @@ public:
             else{
                 dash++;
             }
-            ans= abs(left-right) + dash;
-        }
-
+        
+ans= abs(left-right) + dash;
         
 
-        return  ans;
+        
         
     }
+    return  ans;
+}
 };
