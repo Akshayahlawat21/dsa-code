@@ -1,53 +1,84 @@
 class Solution {
 public:
+    typedef long long ll;
+
+    ll get1D(int side, int x, int y) {
+        if(y == 0) return x;
+
+        if(x == side) return side + y;
+
+        if(y == side) return 3LL * side - x;
+
+        return 4LL * side - y;
+    }
+
+    bool check(vector<ll>& doubled, int n, int k, int side, int mid) {
+        ll perimeter = 4LL * side;
+
+        for(int i = 0; i < n; i++) { //O(n)
+            int count = 1; //Picked one point
+            int idx   = i;
+
+            ll lastPos = doubled[idx];
+
+            for(int j = 2; j <= k; j++) { //O(k * log(n))
+                ll target = lastPos + mid;
+
+                auto it = lower_bound(begin(doubled) + idx + 1, begin(doubled) + i + n, target);
+
+                if(it == begin(doubled) + i + n) break;
+
+                idx = it - begin(doubled);
+                lastPos = doubled[idx];
+                count++;
+            }
+
+            if(count == k && (doubled[i] + perimeter - lastPos >= mid)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     int maxDistance(int side, vector<vector<int>>& points, int k) {
-        vector<long long> arr;
+        ll perimeter = 4LL * side;
+        int n = points.size();
 
-        for (auto& p : points) {
-            int x = p[0], y = p[1];
-            if (x == 0) {
-                arr.push_back(y);
-            } else if (y == side) {
-                arr.push_back(side + x);
-            } else if (x == side) {
-                arr.push_back(side * 3LL - y);
-            } else {
-                arr.push_back(side * 4LL - x);
-            }
+        vector<ll> positions(n);
+
+        for(int i = 0; i < n; i++) {
+            positions[i] = get1D(side, points[i][0], points[i][1]);
         }
-        sort(arr.begin(), arr.end());
 
-        auto check = [&](long long limit) -> bool {
-            for (long long start : arr) {
-                long long end = start + side * 4LL - limit;
-                long long cur = start;
-                for (int i = 0; i < k - 1; i++) {
-                    auto it = ranges::lower_bound(arr, cur + limit);
-                    if (it == arr.end() || *it > end) {
-                        cur = -1;
-                        break;
-                    }
-                    cur = *it;
-                }
-                if (cur >= 0) {
-                    return true;
-                }
-            }
-            return false;
-        };
+        sort(begin(positions), end(positions));
 
-        long long lo = 1, hi = side;
-        int ans = 0;
-        while (lo <= hi) {
-            long long mid = (lo + hi) / 2;
-            if (check(mid)) {
-                lo = mid + 1;
-                ans = mid;
+        //double the positions array to easily handle round wrap
+        vector<ll> doubled(2*n);
+        for(int i = 0; i < n; i++) {
+            doubled[i]   = positions[i];
+            doubled[i+n] = positions[i] + perimeter;
+        }
+
+        int l = 0;
+        int r = 2*side;
+
+        int result = 0;
+
+        //log(side) * n * klog(n)
+        while(l <= r) {
+            int mid = l + (r-l)/2;
+
+            if(check(doubled, n, k, side, mid)) {
+                result = mid;
+                l = mid+1;
             } else {
-                hi = mid - 1;
+                r = mid-1;
             }
         }
 
-        return ans;
+        return result;
+
+
     }
 };
