@@ -14,35 +14,31 @@ public:
                 return mid;
             }
 
-          
-            if (nums[i] <= nums[mid]) {
 
-            
-                if (target >= nums[i] && target < nums[mid]) {
-                    j = mid - 1;
+            if( nums[i]<= nums[mid]){
+                if( nums[i]<= target && target < nums[mid]){
+                    j = mid -1;
                 }
-
-              
                 else {
-                    i = mid + 1;
+                    i = mid+1;
                 }
             }
 
-           
-            else {
-
-                
-                if (target > nums[mid] && target <= nums[j]) {
-                    i = mid + 1;
+            else{
+                if( nums[mid] < target && target <= nums[j]){
+                    i = mid +1;
                 }
-
-       
                 else {
-                    j = mid - 1;
+                    j = mid-1;
                 }
             }
         }
-
         return -1;
+
     }
 };
+
+     
+
+
+          
