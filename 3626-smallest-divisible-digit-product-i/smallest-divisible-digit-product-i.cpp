@@ -1,14 +1,14 @@
 class Solution {
 public:
     int smallestNumber(int n, int t) {
-        // int temp = n;
+        int temp = n;
 
-        // int p = 1;
+        int p = 1;
 
         while (true) {
             // Step 1
-           int  temp = n;
-           int p = 1;
+            temp = n;
+            p = 1;
 
             // Step 2
             // Calculate product of digits
