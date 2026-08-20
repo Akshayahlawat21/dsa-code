@@ -10,18 +10,26 @@ public:
         arr1.push_back(nums[0]);
         arr2.push_back(nums[1]);
 
-        int i = 0;
-        int j =0 ;
+        // int i = 0;
+        // int j =0 ;
 
+        // for (int k = 2; k < n; k++) {
+        //     if (arr1[i] > arr2[j]) {
+        //         arr1.push_back(nums[k]);
+        //         i++;
+        //     }
+
+        //     else {
+        //         arr2.push_back(nums[k]);
+        //         j++;
+        //     }
+        // }
         for (int k = 2; k < n; k++) {
-            if (arr1[i] > arr2[j]) {
-                arr1.push_back(nums[k]);
-                i++;
-            }
 
-            else {
+            if (arr1.back() > arr2.back()) {
+                arr1.push_back(nums[k]);
+            } else {
                 arr2.push_back(nums[k]);
-                j++;
             }
         }
 
