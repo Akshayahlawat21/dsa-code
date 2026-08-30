@@ -2,42 +2,61 @@ class Solution {
 public:
     string shortestBeautifulSubstring(string s, int k) {
 
-     string answer = "";
-        int left = 0;
-        int ones = 0;
+        vector<string> ans;
 
-        for (int right = 0; right < s.size(); right++) {
-            if (s[right] == '1') {
-                ones++;
-            }
+        // Generate all substrings
+        for (int i = 0; i < s.length(); i++) {
 
-            while (ones > k) {
-                if (s[left] == '1') {
-                    ones--;
-                }
-                left++;
-            }
+            string temp = "";
 
-            while (ones == k && s[left] == '0') {
-                left++;
-            }
+            for (int j = i; j < s.length(); j++) {
 
-            if (ones == k) {
-                int length = right - left + 1;
+                temp += s[j];
 
-                string candidate = s.substr(left, length);
-
-                if (answer.empty() ||
-                    candidate.size() < answer.size() ||
-                    (candidate.size() == answer.size() && candidate < answer)) {
-                    answer = candidate;
-                }
+                ans.push_back(temp);
             }
         }
 
-        return answer;
+        // Keep only strings having exactly k ones
+        vector<string> result;
 
+        for (string str : ans) {
 
-        
+            int count = 0;
+
+            for (char ch : str) {
+
+                if (ch == '1') {
+                    count++;
+                }
+            }
+
+            if (count == k) {
+                result.push_back(str);
+            }
+        }
+
+        // No beautiful substring
+        if (result.empty()) {
+            return "";
+        }
+
+        // Find shortest, and if same length,
+        // lexicographically smallest
+        string smallest = result[0];
+
+        for (string str : result) {
+
+            if (str.length() < smallest.length()) {
+
+                smallest = str;
+            }
+            else if (str.length() == smallest.length() && str < smallest) {
+
+                smallest = str;
+            }
+        }
+
+        return smallest;
     }
 };
